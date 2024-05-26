@@ -19,14 +19,14 @@ async function guardarCliente(cliente, socket) {
     cliente.clases = parseInt(cliente.clases);
     cliente.nombre = cliente.nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     cliente.nombre = capitalizeFirstLetterOfEachWord(cliente.nombre);
-    await Cliente.create(cliente);
+    const clienteCreado = await Cliente.create(cliente);
     await Historial.create({
-        nombre: cliente.nombre,
-        dni: cliente.dni,
+        nombre: clienteCreado.nombre,
+        dni: clienteCreado.dni,
         fecha: new Date().toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' }),
         hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        clases: cliente.clases,
-        id_cliente: cliente._id,
+        clases: clienteCreado.clases,
+        id_cliente: clienteCreado._id,
         tipo: 'modificacion'
     });
 };
