@@ -21,7 +21,7 @@ function Login() {
     const [modalDataOK, setModalDataOK] = useState(true);
 
     const login = (key) => {
-        if (key === 'Enter') {
+        if (key === 'Enter' && !modalOpen) {
             socket.emit('login', dni);
         };
     };
@@ -53,6 +53,7 @@ function Login() {
         const intervalId = setInterval(() => {
             document.querySelector('.input-login').focus();
         }, 100);
+        document.title = 'XTREME - ACCESO'
         return () => {
             socket.off('login-ok');
             socket.off('login-error');
