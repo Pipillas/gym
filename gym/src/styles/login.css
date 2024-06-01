@@ -4,6 +4,17 @@
     align-items: center;
     height: 100vh;
     flex-direction: column;
+    background-image: radial-gradient(circle at 40% 91%, rgba(179, 35, 35, 0.1) 0%, rgba(179, 35, 35, 0.1) 50%, rgba(210, 210, 210, 0.1) 50%, rgba(210, 210, 210, 0.1) 100%),
+                  radial-gradient(circle at 66% 97%, rgba(35, 35, 35, 0.1) 0%, rgba(35, 35, 35, 0.1) 50%, rgba(77, 77, 77, 0.1) 50%, rgba(77, 77, 77, 0.1) 100%),
+                  radial-gradient(circle at 86% 7%, rgba(102, 0, 0, 0.1) 0%, rgba(102, 0, 0, 0.1) 50%, rgba(179, 179, 179, 0.1) 50%, rgba(179, 179, 179, 0.1) 100%),
+                  radial-gradient(circle at 15% 16%, rgba(128, 0, 0, 0.1) 0%, rgba(128, 0, 0, 0.1) 50%, rgba(210, 77, 77, 0.1) 50%, rgba(210, 77, 77, 0.1) 100%),
+                  radial-gradient(circle at 75% 99%, rgba(210, 77, 77, 0.1) 0%, rgba(210, 77, 77, 0.1) 50%, rgba(64, 64, 64, 0.1) 50%, rgba(64, 64, 64, 0.1) 100%),
+                  linear-gradient(90deg, rgb(128, 0, 0), rgb(51, 51, 51));
+
+}
+
+.div-login img {
+    margin-top: -200px;
 }
 
 .input-login {
@@ -20,8 +31,8 @@
 }
 
 .input-login:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    border-color: #db0000;
+    box-shadow: 0 0px 10px rgb(197, 0, 0);
 }
 
 .modal-login {

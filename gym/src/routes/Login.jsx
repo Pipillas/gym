@@ -4,6 +4,7 @@ import Modal from '../components/Modal.jsx';
 import Titulo from '../components/Titulo.jsx';
 import { socket } from '../main.jsx';
 import '../styles/login.css';
+import myLogo from '../assets/logo.png';
 
 const TIEMPO_ESPERA = 5000;
 
@@ -63,12 +64,13 @@ function Login() {
 
     return (
         <div className='div-login' onKeyDown={e => login(e.key)}>
-            <Titulo className="titulo-login" />
+            {/* <Titulo className="titulo-login" /> */}
+            <img src={myLogo} alt="logo" />
             <Modal className={`modal-login ${modalDataOK ? 'verde' : 'rojo'} ${cliente.clases < 0 && 'amarillo'}`} isOpen={modalOpen} onClose={closeModal}>
                 {
                     modalDataOK ? (
                         <React.Fragment>
-                            <div>¡Buenas {cliente.nombre}!</div>
+                            <div>¡Bienvenido {cliente.nombre}!</div>
                             <div>Te quedan {cliente.clases} clases restantes.</div>
                         </React.Fragment>
                     ) : (
