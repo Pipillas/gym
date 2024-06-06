@@ -38,8 +38,8 @@ async function checkDNI(dni, socket) {
     }
 }
 
-async function obtenerClientes(texto, page, socket) {
-    let limit = 15;
+async function obtenerClientes(texto, page, negativos, socket) {
+    let limit = 10;
     const saltarEstudios = limit * (page - 1);
     let filtro = {};
     texto = eliminarCaracteresEspeciales(texto);
@@ -51,6 +51,9 @@ async function obtenerClientes(texto, page, socket) {
             { "telefonoEmergencia": { $regex: texto, $options: "i" } },
         ];
     };
+    if (negativos) {
+        filtro.clases = { $lt: 0 };
+    }
     const clientes = await Cliente.find(filtro).sort({ createdAt: -1 }).skip(saltarEstudios).limit(limit);
     const paginasTotal = Math.ceil((await Cliente.countDocuments(filtro)) / limit);
     socket.emit('clientes', clientes);
@@ -113,17 +116,18 @@ async function login(dni, socket, io) {
 }
 
 async function obtenerHistorial(texto, page, socket) {
-    let limit = 15;
+    let limit = 10;
     const saltar = limit * (page - 1);
     let filtro = {};
     texto = eliminarCaracteresEspeciales(texto);
     if (texto !== "") {
         filtro.$or = [
-            { "dni": { $regex: texto, $options: "i" } },
-            { "nombre": { $regex: texto, $options: "i" } },
-            { "fecha": { $regex: texto, $options: "i" } },
-            { "hora": { $regex: texto, $options: "i" } },
-            { "tipo": { $regex: texto, $options: "i" } },
+            { dni: { $regex: texto, $options: "i" } },
+            { nombre: { $regex: texto, $options: "i" } },
+            { fecha: { $regex: texto, $options: "i" } },
+            { hora: { $regex: texto, $options: "i" } },
+            { tipo: { $regex: texto, $options: "i" } },
+            { tipo: "reset" }
         ];
     };
     const historial = await Historial.find(filtro).sort({ createdAt: -1 }).skip(saltar).limit(limit);
@@ -139,6 +143,12 @@ async function resetMes(io) {
         clientes,
         historial
     });
+    await Historial.create({
+        tipo: 'reset',
+        dni: '',
+        fecha: new Date().toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' }),
+        hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    });
     await Cliente.updateMany({ clases: { $gte: 0 } }, { $set: { clases: 0 } });
     io.emit('cambios');
 }
@@ -146,7 +156,7 @@ async function resetMes(io) {
 function socketFunctions(io, socket) {
     socket.on('guardar-cliente', async cliente => await guardarCliente(cliente, socket));
     socket.on('check-dni', async dni => await checkDNI(dni, socket));
-    socket.on('clientes', async (texto, page) => await obtenerClientes(texto, page, socket));
+    socket.on('clientes', async (texto, page, negativos) => await obtenerClientes(texto, page, negativos, socket));
     socket.on('cambiar-clases', async (id, clases) => await cambiarClases(id, clases, io));
     socket.on('guardar-cliente-editado', async (cliente) => await guardarClienteEditado(cliente, io));
     socket.on('login', async dni => await login(dni, socket, io));

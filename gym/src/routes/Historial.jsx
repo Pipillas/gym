@@ -20,6 +20,12 @@ function Historial() {
     const cambiarPagina = (e, value) => setPage(value);
 
     useEffect(() => {
+        if (page > totalPages) {
+            setPage(1);
+        }
+    }, [page, totalPages]);
+
+    useEffect(() => {
         socket.on('historial', historial => setHistorial(historial));
         socket.on('total-paginas', totalPages => setTotalPages(totalPages));
         socket.on('cambios', () => obtenerHistorial(texto, page));
@@ -55,18 +61,27 @@ function Historial() {
                             </thead>
                             <tbody>
                                 {
-                                    historial?.map((hist, index) => (
-                                        <tr className={`${hist.tipo === 'modificacion' ? 'verde-claro' : 'rojo-claro'}`} key={index}>
-                                            <td className="contenido">{hist.fecha}</td>
-                                            <td className="contenido">{hist.hora}</td>
-                                            <td className="contenido">
-                                                <NumericFormat value={hist.dni} thousandSeparator='.' decimalSeparator="," decimalScale={0} displayType='text' />
-                                            </td>
-                                            <td className="contenido">{hist.nombre}</td>
-                                            <td className="contenido">{hist.tipo === 'modificacion' ? `Modificación` : `Ingreso`}</td>
-                                            <td className={`contenido ${hist.clases < 0 ? 'rojo-fuerte' : ''}`}>{hist.clases}</td>
-                                        </tr>
-                                    ))
+                                    historial?.map((hist, index) => {
+                                        if (hist.tipo === 'reset') {
+                                            return (
+                                                <tr className='amarillo-claro' key={index}>
+                                                    <td colSpan={6} className="contenido">NUEVO MES hecho el {hist.fecha} a las {hist.hora}</td>
+                                                </tr>
+                                            )
+                                        }
+                                        return (
+                                            <tr className={`${hist.tipo === 'modificacion' ? 'verde-claro' : 'rojo-claro'}`} key={index}>
+                                                <td className="contenido">{hist.fecha}</td>
+                                                <td className="contenido">{hist.hora}</td>
+                                                <td className="contenido">
+                                                    <NumericFormat value={hist.dni} thousandSeparator='.' decimalSeparator="," decimalScale={0} displayType='text' />
+                                                </td>
+                                                <td className="contenido">{hist.nombre}</td>
+                                                <td className="contenido">{hist.tipo === 'modificacion' ? `Modificación` : 'Ingreso'}</td>
+                                                <td className={`contenido ${hist.clases < 0 ? 'rojo-fuerte' : ''}`}>{hist.clases}</td>
+                                            </tr>
+                                        )
+                                    })
                                 }
                             </tbody>
                         </table>

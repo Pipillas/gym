@@ -22,6 +22,7 @@ function Lista() {
         telefonoEmergencia: '',
         clases: '',
     });
+    const [negativos, setNegativos] = useState(false);
 
     const limpiar = () => {
         setClienteClickeado({
@@ -37,15 +38,17 @@ function Lista() {
         setModalOpen(false);
     };
 
-    const obtenerClientes = (texto, page) => {
-        socket.emit('clientes', texto, page);
+    const obtenerClientes = (texto, page, negativos) => {
+        socket.emit('clientes', texto, page, negativos);
     };
 
     const cambiarPagina = (e, value) => setPage(value);
 
+    /*
     const cambiarClases = (id, cantidad) => {
         socket.emit('cambiar-clases', id, cantidad);
     }
+    */
 
     const clienteClick = (cliente) => {
         setClienteClickeado(cliente);
@@ -94,24 +97,24 @@ function Lista() {
         if (page > totalPages) {
             setPage(1);
         }
-    }, [totalPages]);
+    }, [page, totalPages]);
 
     useEffect(() => {
         socket.on('clientes', clientes => setClientes(clientes));
         socket.on('total-paginas', totalPages => setTotalPages(totalPages));
-        socket.on('cambios', () => obtenerClientes(texto, page));
+        socket.on('cambios', () => obtenerClientes(texto, page, negativos));
         socket.on('dni-existe', (dni) => {
             alert(`ESTE DNI: ${dni} YA EXISTE, PARA CARGAR CLASES O EDITAR VAYA A LA LISTA DE CLIENTES`);
             setClienteClickeado(prev => ({ ...prev, dni: '' }));
         });
-        obtenerClientes(texto, page);
+        obtenerClientes(texto, page, negativos);
         return () => {
             socket.off('clientes');
             socket.off('total-paginas');
             socket.off('cambios');
             socket.off('dni-existe');
         };
-    }, [texto, page]);
+    }, [texto, page, negativos]);
 
     return (
         <React.Fragment>
@@ -161,7 +164,7 @@ function Lista() {
                         <div className="group-buscar">
                             <input value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Buscar clientes..." type="search" className="input-buscar" />
                             <div className='checkbox-container'>
-                                <input type="checkbox" className='input-checkbox'/>
+                                <input checked={negativos} onChange={e => setNegativos(e.target.checked)} type="checkbox" className='input-checkbox' />
                                 <span className='titulo-checkbox'>Mostrar solo negativos</span>
                             </div>
                         </div>
