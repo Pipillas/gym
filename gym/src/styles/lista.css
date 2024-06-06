@@ -41,3 +41,19 @@
     background-color: rgba(146, 146, 146, 0.616);
     cursor: pointer;
 }
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.titulo-checkbox {
+    color: #e3e3e3;
+    margin-left: 10px;
+}
+
+.input-checkbox {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}

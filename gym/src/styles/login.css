@@ -17,6 +17,10 @@
     margin-top: -200px;
 }
 
+.imgLogo {
+    height: 300px;
+}
+
 .input-login {
     color: black;
     padding: 15px;

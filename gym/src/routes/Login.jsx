@@ -65,7 +65,7 @@ function Login() {
     return (
         <div className='div-login' onKeyDown={e => login(e.key)}>
             {/* <Titulo className="titulo-login" /> */}
-            <img src={myLogo} alt="logo" />
+            <img className='imgLogo' src={myLogo} alt="logo" />
             <Modal className={`modal-login ${modalDataOK ? 'verde' : 'rojo'} ${cliente.clases < 0 && 'amarillo'}`} isOpen={modalOpen} onClose={closeModal}>
                 {
                     modalDataOK ? (

@@ -160,6 +160,10 @@ function Lista() {
                         <p className="subtitulo">LISTA DE CLIENTES</p>
                         <div className="group-buscar">
                             <input value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Buscar clientes..." type="search" className="input-buscar" />
+                            <div className='checkbox-container'>
+                                <input type="checkbox" className='input-checkbox'/>
+                                <span className='titulo-checkbox'>Mostrar solo negativos</span>
+                            </div>
                         </div>
                         <table className="tabla-clientes">
                             <thead>
