@@ -1,0 +1,1 @@
+pm2 start gym_backend/src/index.js --name backend && pm2 start gym_frontend/index.js --name frontend
